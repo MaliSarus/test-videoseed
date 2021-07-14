@@ -1,32 +1,54 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <Header/>
+    <main>
+      <b-container>
+        <b-row>
+          <b-col>
+            <router-view></router-view>
+          </b-col>
+        </b-row>
+      </b-container>
+
+      <b-modal id="modal-logout" hide-footer>
+        <template #modal-title>
+          Are You sure about that?
+        </template>
+        <b-row>
+          <b-col>
+            <b-button class="mt-3" block @click="logoutUser" variant="success">Yes</b-button>
+          </b-col>
+          <b-col>
+            <b-button class="mt-3" @click="$bvModal.hide('modal-logout')" block variant="light">No</b-button>
+          </b-col>
+
+        </b-row>
+
+      </b-modal>
+    </main>
+
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+  import Header from '@/components/Header/Header'
+  import { mapActions, mapMutations } from 'vuex'
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+  export default {
+    components: { Header },
+    methods: {
+      ...mapMutations(['clearUser']),
+      logoutUser () {
+        this.$router.push('/')
+        this.clearUser()
+        this.$bvModal.hide('modal-logout')
+      }
     }
   }
-}
+</script>
+
+<style lang="scss">
+  main {
+    padding-top: 20px;
+  }
 </style>
